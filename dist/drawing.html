@@ -6,7 +6,7 @@
 </head>
 <body>
   <div>
-    <canvas width="500px" height="500px" id="drawing-panel" style='border: 1px solid black;'></canvas>
+    <canvas width="500" height="500" id="drawing-panel" style='border: 1px solid black;'></canvas>
     <div>document:</div>
     <pre style="white-space: pre-wrap;"><code id="log-holder"></code></pre>
   </div>
@@ -15,11 +15,32 @@
     const drawingPanel = document.getElementById('drawing-panel');
     const placeholder = document.getElementById('placeholder');
     const logHolder = document.getElementById('log-holder');
+    const CANVAS_SIZE = 500
+
+    function initCanvas (width, height) {
+      drawingPanel.style.width = width + "px";
+      drawingPanel.style.height = height + "px";
+
+      var scale = window.devicePixelRatio; 
+      drawingPanel.width = width * scale;
+      drawingPanel.height = height * scale;
+
+      const context = drawingPanel.getContext('2d');
+      context.scale(scale, scale);   
+      context.translate(0.5,0.5);
+      return context; 
+    }
+
+    const canvasContext = initCanvas(CANVAS_SIZE, CANVAS_SIZE);
+      
 
     function paintCanvas(shapes) {
       // TODO Now repainting the whole thing. Only changed parts should be drawn.
-      const context = drawingPanel.getContext('2d');
-      context.clearRect(0, 0, 500, 500);
+      const context = canvasContext;
+
+      // context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      context.lineWidth = 1;
+      context.lineJoin = 'round';
 
       for (const shape of shapes) {
         context.beginPath();
