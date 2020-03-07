@@ -37,14 +37,10 @@
       }
     }
 
-    function displayLog(doc) {
-      // logHolder.innerText = doc.toJSON();
-    }
-
     function getPoint(e) {
       return {
-        x: e.clientX - drawingPanel.offsetLeft,
-        y: e.clientY - drawingPanel.offsetTop
+        x: e.clientX - (drawingPanel.offsetLeft) + window.scrollX,
+        y: e.clientY - (drawingPanel.offsetTop) + window.scrollY
       };
     }
 
@@ -69,7 +65,6 @@
 
         doc.subscribe((event) => {
           paintCanvas(doc.getRootObject().shapes);
-          displayLog(doc);
         });
         await client.sync();
 
@@ -104,7 +99,6 @@
 
         // 05. set initial value.
         paintCanvas(doc.getRootObject().shapes);
-        displayLog(doc);
       } catch (e) {
         console.error(e);
       }
