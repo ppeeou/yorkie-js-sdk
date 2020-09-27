@@ -1383,10 +1383,10 @@ export class RichTextNodeAttr extends jspb.Message {
   getValue(): string;
   setValue(value: string): RichTextNodeAttr;
 
-  getMovedAt(): TimeTicket | undefined;
-  setMovedAt(value?: TimeTicket): RichTextNodeAttr;
-  hasMovedAt(): boolean;
-  clearMovedAt(): RichTextNodeAttr;
+  getUpdatedAt(): TimeTicket | undefined;
+  setUpdatedAt(value?: TimeTicket): RichTextNodeAttr;
+  hasUpdatedAt(): boolean;
+  clearUpdatedAt(): RichTextNodeAttr;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RichTextNodeAttr.AsObject;
@@ -1400,7 +1400,7 @@ export namespace RichTextNodeAttr {
   export type AsObject = {
     key: string,
     value: string,
-    movedAt?: TimeTicket.AsObject,
+    updatedAt?: TimeTicket.AsObject,
   }
 }
 

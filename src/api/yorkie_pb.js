@@ -11644,7 +11644,7 @@ proto.api.RichTextNodeAttr.toObject = function(includeInstance, msg) {
   var f, obj = {
     key: jspb.Message.getFieldWithDefault(msg, 1, ""),
     value: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    movedAt: (f = msg.getMovedAt()) && proto.api.TimeTicket.toObject(includeInstance, f)
+    updatedAt: (f = msg.getUpdatedAt()) && proto.api.TimeTicket.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -11692,7 +11692,7 @@ proto.api.RichTextNodeAttr.deserializeBinaryFromReader = function(msg, reader) {
     case 3:
       var value = new proto.api.TimeTicket;
       reader.readMessage(value,proto.api.TimeTicket.deserializeBinaryFromReader);
-      msg.setMovedAt(value);
+      msg.setUpdatedAt(value);
       break;
     default:
       reader.skipField();
@@ -11737,7 +11737,7 @@ proto.api.RichTextNodeAttr.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getMovedAt();
+  f = message.getUpdatedAt();
   if (f != null) {
     writer.writeMessage(
       3,
@@ -11785,10 +11785,10 @@ proto.api.RichTextNodeAttr.prototype.setValue = function(value) {
 
 
 /**
- * optional TimeTicket moved_at = 3;
+ * optional TimeTicket updated_at = 3;
  * @return {?proto.api.TimeTicket}
  */
-proto.api.RichTextNodeAttr.prototype.getMovedAt = function() {
+proto.api.RichTextNodeAttr.prototype.getUpdatedAt = function() {
   return /** @type{?proto.api.TimeTicket} */ (
     jspb.Message.getWrapperField(this, proto.api.TimeTicket, 3));
 };
@@ -11798,7 +11798,7 @@ proto.api.RichTextNodeAttr.prototype.getMovedAt = function() {
  * @param {?proto.api.TimeTicket|undefined} value
  * @return {!proto.api.RichTextNodeAttr} returns this
 */
-proto.api.RichTextNodeAttr.prototype.setMovedAt = function(value) {
+proto.api.RichTextNodeAttr.prototype.setUpdatedAt = function(value) {
   return jspb.Message.setWrapperField(this, 3, value);
 };
 
@@ -11807,8 +11807,8 @@ proto.api.RichTextNodeAttr.prototype.setMovedAt = function(value) {
  * Clears the message field making it undefined.
  * @return {!proto.api.RichTextNodeAttr} returns this
  */
-proto.api.RichTextNodeAttr.prototype.clearMovedAt = function() {
-  return this.setMovedAt(undefined);
+proto.api.RichTextNodeAttr.prototype.clearUpdatedAt = function() {
+  return this.setUpdatedAt(undefined);
 };
 
 
@@ -11816,7 +11816,7 @@ proto.api.RichTextNodeAttr.prototype.clearMovedAt = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.api.RichTextNodeAttr.prototype.hasMovedAt = function() {
+proto.api.RichTextNodeAttr.prototype.hasUpdatedAt = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 

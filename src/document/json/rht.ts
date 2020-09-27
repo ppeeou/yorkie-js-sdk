@@ -19,12 +19,12 @@ import { TimeTicket } from '../time/ticket';
 export class RHTNode {
   private key: string;
   private value: string;
-  private movedAt: TimeTicket;
+  private updatedAt: TimeTicket;
 
-  constructor(key: string, value: string, movedAt: TimeTicket) {
+  constructor(key: string, value: string, updatedAt: TimeTicket) {
     this.key = key;
     this.value = value;
-    this.movedAt = movedAt;
+    this.updatedAt = updatedAt;
   }
 
   public static of(key: string, value: string, createdAt: TimeTicket): RHTNode {
@@ -39,8 +39,8 @@ export class RHTNode {
     return this.value;
   }
 
-  public getMovedAt(): TimeTicket {
-    return this.movedAt;
+  public getUpdatedAt(): TimeTicket {
+    return this.updatedAt;
   }
 }
 
@@ -63,7 +63,7 @@ export class RHT {
   public set(key: string, value: string, executedAt: TimeTicket): void {
     const prev = this.nodeMapByKey.get(key);
 
-    if (prev === undefined || executedAt.after(prev.getMovedAt())) {
+    if (prev === undefined || executedAt.after(prev.getUpdatedAt())) {
       const node = RHTNode.of(key, value, executedAt);
       this.nodeMapByKey.set(key, node);
       this.nodeMapByCreatedAt.set(executedAt.toIDString(), node);
