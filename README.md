@@ -63,7 +63,7 @@ npm run test
 Start MongoDB, Yorkie and Envoy proxy in a terminal session.
 
 ```bash
-cd docker
+cd docker 
 docker-compose up
 ```
 
