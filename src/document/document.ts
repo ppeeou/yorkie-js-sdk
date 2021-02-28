@@ -164,7 +164,7 @@ export class Document implements Observable<DocEvent> {
     this.checkpoint = this.checkpoint.forward(pack.getCheckpoint());
 
     // 04. Do Garbage collection.
-    this.garbageCollect(pack.getMinSyncedTicket());
+    // this.garbageCollect(pack.getMinSyncedTicket());
 
     if (logger.isEnabled(LogLevel.Trivial)) {
       logger.trivial(`${this.root.toJSON()}`);
