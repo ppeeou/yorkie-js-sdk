@@ -17,6 +17,7 @@
 import { assert } from 'chai';
 import { RHT } from '../../../src/document/json/rht';
 import { InitialTimeTicket } from '../../../src/document/time/ticket';
+import { Indexable } from '../../helper/helper';
 
 describe('RHT', function () {
   it('should set and get a value', function () {
@@ -66,19 +67,18 @@ describe('RHT', function () {
   });
 
   it('should handle toJSON', function () {
-    const testData = {
+    const testData: Indexable = {
       testKey1: 'testValue1',
       testKey2: 'testValue2',
       testKey3: 'testValue3',
     };
 
     const rht = RHT.create();
-    for (const dataKey of Object.keys(testData)) {
-      rht.set(dataKey, testData[dataKey], InitialTimeTicket);
+    for (const [key, value] of Object.entries(testData)) {
+      rht.set(key, value, InitialTimeTicket);
     }
 
     const jsonStr = rht.toJSON();
-
     const jsonObj = JSON.parse(jsonStr);
     assert.equal(jsonObj.testKey1, testData.testKey1);
     assert.equal(jsonObj.testKey2, testData.testKey2);
@@ -86,19 +86,18 @@ describe('RHT', function () {
   });
 
   it('should handle toObject', function () {
-    const testData = {
+    const testData: Indexable = {
       testKey1: 'testValue1',
       testKey2: 'testValue2',
       testKey3: 'testValue3',
     };
 
     const rht = RHT.create();
-    for (const dataKey of Object.keys(testData)) {
-      rht.set(dataKey, testData[dataKey], InitialTimeTicket);
+    for (const [key, value] of Object.entries(testData)) {
+      rht.set(key, value, InitialTimeTicket);
     }
 
     const jsonObj = rht.toObject();
-
     assert.equal(jsonObj.testKey1, testData.testKey1);
     assert.equal(jsonObj.testKey2, testData.testKey2);
     assert.equal(jsonObj.testKey3, testData.testKey3);

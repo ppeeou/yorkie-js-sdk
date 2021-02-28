@@ -17,7 +17,7 @@
 import { logger } from '../../util/logger';
 import { TimeTicket } from '../time/ticket';
 import { RHT } from './rht';
-import { JSONElement } from './element';
+import { TextElement } from './element';
 import {
   Change,
   ChangeType,
@@ -48,8 +48,12 @@ export class RichTextValue {
     return this.content.length;
   }
 
-  public substring(indexStart, indexEnd: number): RichTextValue {
-    return new RichTextValue(this.content.substring(indexStart, indexEnd));
+  public substring(indexStart: number, indexEnd: number): RichTextValue {
+    const value = new RichTextValue(
+      this.content.substring(indexStart, indexEnd),
+    );
+    value.attributes = this.attributes.deepcopy();
+    return value;
   }
 
   public setAttr(key: string, value: string, updatedAt: TimeTicket): void {
@@ -73,7 +77,7 @@ export class RichTextValue {
   }
 }
 
-export class RichText extends JSONElement {
+export class RichText extends TextElement {
   private onChangesHandler: (changes: Array<Change>) => void;
   private rgaTreeSplit: RGATreeSplit<RichTextValue>;
   private selectionMap: Map<string, Selection>;
@@ -103,6 +107,7 @@ export class RichText extends JSONElement {
     fromIdx: number,
     toIdx: number,
     content: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attributes?: { [key: string]: string },
   ): RichText {
     logger.fatal(
@@ -193,7 +198,7 @@ export class RichText extends JSONElement {
         actor: editedAt.getActorID(),
         from: fromIdx,
         to: toIdx,
-        attributes: attributes,
+        attributes,
       });
 
       for (const [key, value] of Object.entries(attributes)) {
@@ -279,6 +284,21 @@ export class RichText extends JSONElement {
 
   public getAnnotatedString(): string {
     return this.rgaTreeSplit.getAnnotatedString();
+  }
+
+  /**
+   * removedNodesLen returns length of removed nodes
+   */
+  public getRemovedNodesLen(): number {
+    return this.rgaTreeSplit.getRemovedNodesLen();
+  }
+
+  /**
+   * cleanupRemovedNodes cleans up nodes that have been removed.
+   * The cleaned nodes are subject to garbage collector collection.
+   */
+  public cleanupRemovedNodes(ticket: TimeTicket): number {
+    return this.rgaTreeSplit.cleanupRemovedNodes(ticket);
   }
 
   public deepcopy(): RichText {

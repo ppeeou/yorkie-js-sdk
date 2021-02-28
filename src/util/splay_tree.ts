@@ -138,8 +138,9 @@ export class SplayTree<V> {
 
   /**
    * Find the index of the given node in BST.
-   * @param node the given node
-   * @return the index of given node
+   *
+   * @param node - the given node
+   * @returns the index of given node
    */
   public indexOf(node: SplayNode<V>): number {
     if (!node) {
@@ -268,7 +269,7 @@ export class SplayTree<V> {
   }
 
   public getAnnotatedString(): string {
-    const metaString = [];
+    const metaString: Array<SplayNode<V>> = [];
     this.traverseInorder(this.root, metaString);
     return metaString
       .map(

@@ -1,12 +1,12 @@
 # Yorkie JavaScript SDK
 
-[![codecov](https://codecov.io/gh/yorkie-team/yorkie-js-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/yorkie-team/yorkie-js-sdk)
+[![codecov](https://codecov.io/gh/yorkie-team/yorkie-js-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/yorkie-team/yorkie-js-sdk)
 
 The Yorkie JavaScript SDK implements the client-side libraries.
 
 ## How to use JS SDK
 
-To get started using Yorkie JavaScript SDK, see: https://yorkie.dev/docs/master/js-sdk
+To get started using Yorkie JavaScript SDK, see: https://yorkie.dev/docs/main/js-sdk
 
 ## How yorkie-js-sdk works
 
@@ -42,14 +42,14 @@ How to install protoc-gen-grpc-web: https://github.com/grpc/grpc-web#code-genera
 # generate proto messages and the service client stub classes
 npm run build:proto
 ```
+> Primary "source of truth" location of protobuf message is in [yorkie](https://github.com/yorkie-team/yorkie/tree/main/api). We manage the messages in the repository.
 
 ### Testing yorkie-js-sdk with Envoy, Yorkie and MongoDB.
 
 Start MongoDB, Yorkie and Envoy proxy in a terminal session.
 
 ```bash
-cd docker
-docker-compose up
+docker-compose -f docker/docker-compose.yml up --build -d
 ```
 
 Start the test in another terminal session.
@@ -58,19 +58,24 @@ Start the test in another terminal session.
 npm run test
 ```
 
-### Testing co-editing example with CodeMirror
+### Starting co-editing example with CodeMirror
 
 Start MongoDB, Yorkie and Envoy proxy in a terminal session.
 
 ```bash
-cd docker
-docker-compose up
+docker-compose -f docker/docker-compose.yml up --build -d
 ```
 
-Start the test in another terminal session.
+Start the webpack-dev-server in another terminal session.
 
 ```bash
 npm run start
+```
+
+Open the co-editing example page served by webpack-dev-server in your browser.
+
+```bash
+open http://0.0.0.0:9000/
 ```
 
 ## Contributing

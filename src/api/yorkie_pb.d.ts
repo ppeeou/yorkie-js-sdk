@@ -1,6 +1,4 @@
-import * as jspb from 'google-protobuf'
-
-
+import * as jspb from "google-protobuf"
 
 export class RequestHeader extends jspb.Message {
   getVersion(): number;
@@ -48,8 +46,10 @@ export class ActivateClientResponse extends jspb.Message {
   getClientKey(): string;
   setClientKey(value: string): ActivateClientResponse;
 
-  getClientId(): string;
-  setClientId(value: string): ActivateClientResponse;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): ActivateClientResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ActivateClientResponse.AsObject;
@@ -62,7 +62,7 @@ export class ActivateClientResponse extends jspb.Message {
 export namespace ActivateClientResponse {
   export type AsObject = {
     clientKey: string,
-    clientId: string,
+    clientId: Uint8Array | string,
   }
 }
 
@@ -72,8 +72,10 @@ export class DeactivateClientRequest extends jspb.Message {
   hasHeader(): boolean;
   clearHeader(): DeactivateClientRequest;
 
-  getClientId(): string;
-  setClientId(value: string): DeactivateClientRequest;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): DeactivateClientRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeactivateClientRequest.AsObject;
@@ -86,13 +88,15 @@ export class DeactivateClientRequest extends jspb.Message {
 export namespace DeactivateClientRequest {
   export type AsObject = {
     header?: RequestHeader.AsObject,
-    clientId: string,
+    clientId: Uint8Array | string,
   }
 }
 
 export class DeactivateClientResponse extends jspb.Message {
-  getClientId(): string;
-  setClientId(value: string): DeactivateClientResponse;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): DeactivateClientResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeactivateClientResponse.AsObject;
@@ -104,7 +108,7 @@ export class DeactivateClientResponse extends jspb.Message {
 
 export namespace DeactivateClientResponse {
   export type AsObject = {
-    clientId: string,
+    clientId: Uint8Array | string,
   }
 }
 
@@ -114,8 +118,10 @@ export class AttachDocumentRequest extends jspb.Message {
   hasHeader(): boolean;
   clearHeader(): AttachDocumentRequest;
 
-  getClientId(): string;
-  setClientId(value: string): AttachDocumentRequest;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): AttachDocumentRequest;
 
   getChangePack(): ChangePack | undefined;
   setChangePack(value?: ChangePack): AttachDocumentRequest;
@@ -133,14 +139,16 @@ export class AttachDocumentRequest extends jspb.Message {
 export namespace AttachDocumentRequest {
   export type AsObject = {
     header?: RequestHeader.AsObject,
-    clientId: string,
+    clientId: Uint8Array | string,
     changePack?: ChangePack.AsObject,
   }
 }
 
 export class AttachDocumentResponse extends jspb.Message {
-  getClientId(): string;
-  setClientId(value: string): AttachDocumentResponse;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): AttachDocumentResponse;
 
   getChangePack(): ChangePack | undefined;
   setChangePack(value?: ChangePack): AttachDocumentResponse;
@@ -157,7 +165,7 @@ export class AttachDocumentResponse extends jspb.Message {
 
 export namespace AttachDocumentResponse {
   export type AsObject = {
-    clientId: string,
+    clientId: Uint8Array | string,
     changePack?: ChangePack.AsObject,
   }
 }
@@ -168,8 +176,10 @@ export class DetachDocumentRequest extends jspb.Message {
   hasHeader(): boolean;
   clearHeader(): DetachDocumentRequest;
 
-  getClientId(): string;
-  setClientId(value: string): DetachDocumentRequest;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): DetachDocumentRequest;
 
   getChangePack(): ChangePack | undefined;
   setChangePack(value?: ChangePack): DetachDocumentRequest;
@@ -187,7 +197,7 @@ export class DetachDocumentRequest extends jspb.Message {
 export namespace DetachDocumentRequest {
   export type AsObject = {
     header?: RequestHeader.AsObject,
-    clientId: string,
+    clientId: Uint8Array | string,
     changePack?: ChangePack.AsObject,
   }
 }
@@ -222,8 +232,10 @@ export class WatchDocumentsRequest extends jspb.Message {
   hasHeader(): boolean;
   clearHeader(): WatchDocumentsRequest;
 
-  getClientId(): string;
-  setClientId(value: string): WatchDocumentsRequest;
+  getClient(): Client | undefined;
+  setClient(value?: Client): WatchDocumentsRequest;
+  hasClient(): boolean;
+  clearClient(): WatchDocumentsRequest;
 
   getDocumentKeysList(): Array<DocumentKey>;
   setDocumentKeysList(value: Array<DocumentKey>): WatchDocumentsRequest;
@@ -241,28 +253,8 @@ export class WatchDocumentsRequest extends jspb.Message {
 export namespace WatchDocumentsRequest {
   export type AsObject = {
     header?: RequestHeader.AsObject,
-    clientId: string,
+    client?: Client.AsObject,
     documentKeysList: Array<DocumentKey.AsObject>,
-  }
-}
-
-export class Clients extends jspb.Message {
-  getClientIdsList(): Array<string>;
-  setClientIdsList(value: Array<string>): Clients;
-  clearClientIdsList(): Clients;
-  addClientIds(value: string, index?: number): Clients;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Clients.AsObject;
-  static toObject(includeInstance: boolean, msg: Clients): Clients.AsObject;
-  static serializeBinaryToWriter(message: Clients, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Clients;
-  static deserializeBinaryFromReader(message: Clients, reader: jspb.BinaryReader): Clients;
-}
-
-export namespace Clients {
-  export type AsObject = {
-    clientIdsList: Array<string>,
   }
 }
 
@@ -313,8 +305,10 @@ export namespace WatchDocumentsResponse {
 
 
   export class Event extends jspb.Message {
-    getClientId(): string;
-    setClientId(value: string): Event;
+    getClient(): Client | undefined;
+    setClient(value?: Client): Event;
+    hasClient(): boolean;
+    clearClient(): Event;
 
     getEventType(): EventType;
     setEventType(value: EventType): Event;
@@ -334,7 +328,7 @@ export namespace WatchDocumentsResponse {
 
   export namespace Event {
     export type AsObject = {
-      clientId: string,
+      client?: Client.AsObject,
       eventType: EventType,
       documentKeysList: Array<DocumentKey.AsObject>,
     }
@@ -354,8 +348,10 @@ export class PushPullRequest extends jspb.Message {
   hasHeader(): boolean;
   clearHeader(): PushPullRequest;
 
-  getClientId(): string;
-  setClientId(value: string): PushPullRequest;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): PushPullRequest;
 
   getChangePack(): ChangePack | undefined;
   setChangePack(value?: ChangePack): PushPullRequest;
@@ -373,14 +369,16 @@ export class PushPullRequest extends jspb.Message {
 export namespace PushPullRequest {
   export type AsObject = {
     header?: RequestHeader.AsObject,
-    clientId: string,
+    clientId: Uint8Array | string,
     changePack?: ChangePack.AsObject,
   }
 }
 
 export class PushPullResponse extends jspb.Message {
-  getClientId(): string;
-  setClientId(value: string): PushPullResponse;
+  getClientId(): Uint8Array | string;
+  getClientId_asU8(): Uint8Array;
+  getClientId_asB64(): string;
+  setClientId(value: Uint8Array | string): PushPullResponse;
 
   getChangePack(): ChangePack | undefined;
   setChangePack(value?: ChangePack): PushPullResponse;
@@ -397,7 +395,7 @@ export class PushPullResponse extends jspb.Message {
 
 export namespace PushPullResponse {
   export type AsObject = {
-    clientId: string,
+    clientId: Uint8Array | string,
     changePack?: ChangePack.AsObject,
   }
 }
@@ -483,8 +481,10 @@ export class ChangeID extends jspb.Message {
   getLamport(): string;
   setLamport(value: string): ChangeID;
 
-  getActorId(): string;
-  setActorId(value: string): ChangeID;
+  getActorId(): Uint8Array | string;
+  getActorId_asU8(): Uint8Array;
+  getActorId_asB64(): string;
+  setActorId(value: Uint8Array | string): ChangeID;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ChangeID.AsObject;
@@ -498,7 +498,7 @@ export namespace ChangeID {
   export type AsObject = {
     clientSeq: number,
     lamport: string,
-    actorId: string,
+    actorId: Uint8Array | string,
   }
 }
 
@@ -989,15 +989,15 @@ export namespace JSONElementSimple {
 }
 
 export class JSONElement extends jspb.Message {
-  getObject(): JSONElement.Object | undefined;
-  setObject(value?: JSONElement.Object): JSONElement;
-  hasObject(): boolean;
-  clearObject(): JSONElement;
+  getJsonObject(): JSONElement.JSONObject | undefined;
+  setJsonObject(value?: JSONElement.JSONObject): JSONElement;
+  hasJsonObject(): boolean;
+  clearJsonObject(): JSONElement;
 
-  getArray(): JSONElement.Array | undefined;
-  setArray(value?: JSONElement.Array): JSONElement;
-  hasArray(): boolean;
-  clearArray(): JSONElement;
+  getJsonArray(): JSONElement.JSONArray | undefined;
+  setJsonArray(value?: JSONElement.JSONArray): JSONElement;
+  hasJsonArray(): boolean;
+  clearJsonArray(): JSONElement;
 
   getPrimitive(): JSONElement.Primitive | undefined;
   setPrimitive(value?: JSONElement.Primitive): JSONElement;
@@ -1031,44 +1031,44 @@ export class JSONElement extends jspb.Message {
 
 export namespace JSONElement {
   export type AsObject = {
-    object?: JSONElement.Object.AsObject,
-    array?: JSONElement.Array.AsObject,
+    jsonObject?: JSONElement.JSONObject.AsObject,
+    jsonArray?: JSONElement.JSONArray.AsObject,
     primitive?: JSONElement.Primitive.AsObject,
     text?: JSONElement.Text.AsObject,
     richText?: JSONElement.RichText.AsObject,
     counter?: JSONElement.Counter.AsObject,
   }
 
-  export class Object extends jspb.Message {
+  export class JSONObject extends jspb.Message {
     getNodesList(): Array<RHTNode>;
-    setNodesList(value: Array<RHTNode>): Object;
-    clearNodesList(): Object;
+    setNodesList(value: Array<RHTNode>): JSONObject;
+    clearNodesList(): JSONObject;
     addNodes(value?: RHTNode, index?: number): RHTNode;
 
     getCreatedAt(): TimeTicket | undefined;
-    setCreatedAt(value?: TimeTicket): Object;
+    setCreatedAt(value?: TimeTicket): JSONObject;
     hasCreatedAt(): boolean;
-    clearCreatedAt(): Object;
+    clearCreatedAt(): JSONObject;
 
     getMovedAt(): TimeTicket | undefined;
-    setMovedAt(value?: TimeTicket): Object;
+    setMovedAt(value?: TimeTicket): JSONObject;
     hasMovedAt(): boolean;
-    clearMovedAt(): Object;
+    clearMovedAt(): JSONObject;
 
     getRemovedAt(): TimeTicket | undefined;
-    setRemovedAt(value?: TimeTicket): Object;
+    setRemovedAt(value?: TimeTicket): JSONObject;
     hasRemovedAt(): boolean;
-    clearRemovedAt(): Object;
+    clearRemovedAt(): JSONObject;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Object.AsObject;
-    static toObject(includeInstance: boolean, msg: Object): Object.AsObject;
-    static serializeBinaryToWriter(message: Object, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Object;
-    static deserializeBinaryFromReader(message: Object, reader: jspb.BinaryReader): Object;
+    toObject(includeInstance?: boolean): JSONObject.AsObject;
+    static toObject(includeInstance: boolean, msg: JSONObject): JSONObject.AsObject;
+    static serializeBinaryToWriter(message: JSONObject, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): JSONObject;
+    static deserializeBinaryFromReader(message: JSONObject, reader: jspb.BinaryReader): JSONObject;
   }
 
-  export namespace Object {
+  export namespace JSONObject {
     export type AsObject = {
       nodesList: Array<RHTNode.AsObject>,
       createdAt?: TimeTicket.AsObject,
@@ -1078,36 +1078,36 @@ export namespace JSONElement {
   }
 
 
-  export class Array extends jspb.Message {
+  export class JSONArray extends jspb.Message {
     getNodesList(): Array<RGANode>;
-    setNodesList(value: Array<RGANode>): Array;
-    clearNodesList(): Array;
+    setNodesList(value: Array<RGANode>): JSONArray;
+    clearNodesList(): JSONArray;
     addNodes(value?: RGANode, index?: number): RGANode;
 
     getCreatedAt(): TimeTicket | undefined;
-    setCreatedAt(value?: TimeTicket): Array;
+    setCreatedAt(value?: TimeTicket): JSONArray;
     hasCreatedAt(): boolean;
-    clearCreatedAt(): Array;
+    clearCreatedAt(): JSONArray;
 
     getMovedAt(): TimeTicket | undefined;
-    setMovedAt(value?: TimeTicket): Array;
+    setMovedAt(value?: TimeTicket): JSONArray;
     hasMovedAt(): boolean;
-    clearMovedAt(): Array;
+    clearMovedAt(): JSONArray;
 
     getRemovedAt(): TimeTicket | undefined;
-    setRemovedAt(value?: TimeTicket): Array;
+    setRemovedAt(value?: TimeTicket): JSONArray;
     hasRemovedAt(): boolean;
-    clearRemovedAt(): Array;
+    clearRemovedAt(): JSONArray;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Array.AsObject;
-    static toObject(includeInstance: boolean, msg: Array): Array.AsObject;
-    static serializeBinaryToWriter(message: Array, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Array;
-    static deserializeBinaryFromReader(message: Array, reader: jspb.BinaryReader): Array;
+    toObject(includeInstance?: boolean): JSONArray.AsObject;
+    static toObject(includeInstance: boolean, msg: JSONArray): JSONArray.AsObject;
+    static serializeBinaryToWriter(message: JSONArray, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): JSONArray;
+    static deserializeBinaryFromReader(message: JSONArray, reader: jspb.BinaryReader): JSONArray;
   }
 
-  export namespace Array {
+  export namespace JSONArray {
     export type AsObject = {
       nodesList: Array<RGANode.AsObject>,
       createdAt?: TimeTicket.AsObject,
@@ -1283,8 +1283,8 @@ export namespace JSONElement {
 
   export enum BodyCase { 
     BODY_NOT_SET = 0,
-    OBJECT = 1,
-    ARRAY = 2,
+    JSON_OBJECT = 1,
+    JSON_ARRAY = 2,
     PRIMITIVE = 3,
     TEXT = 4,
     RICH_TEXT = 5,
@@ -1470,6 +1470,50 @@ export namespace TextNodeID {
   }
 }
 
+export class Client extends jspb.Message {
+  getId(): Uint8Array | string;
+  getId_asU8(): Uint8Array;
+  getId_asB64(): string;
+  setId(value: Uint8Array | string): Client;
+
+  getMetadataMap(): jspb.Map<string, string>;
+  clearMetadataMap(): Client;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Client.AsObject;
+  static toObject(includeInstance: boolean, msg: Client): Client.AsObject;
+  static serializeBinaryToWriter(message: Client, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Client;
+  static deserializeBinaryFromReader(message: Client, reader: jspb.BinaryReader): Client;
+}
+
+export namespace Client {
+  export type AsObject = {
+    id: Uint8Array | string,
+    metadataMap: Array<[string, string]>,
+  }
+}
+
+export class Clients extends jspb.Message {
+  getClientsList(): Array<Client>;
+  setClientsList(value: Array<Client>): Clients;
+  clearClientsList(): Clients;
+  addClients(value?: Client, index?: number): Client;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Clients.AsObject;
+  static toObject(includeInstance: boolean, msg: Clients): Clients.AsObject;
+  static serializeBinaryToWriter(message: Clients, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Clients;
+  static deserializeBinaryFromReader(message: Clients, reader: jspb.BinaryReader): Clients;
+}
+
+export namespace Clients {
+  export type AsObject = {
+    clientsList: Array<Client.AsObject>,
+  }
+}
+
 export class DocumentKey extends jspb.Message {
   getCollection(): string;
   setCollection(value: string): DocumentKey;
@@ -1549,8 +1593,10 @@ export class TimeTicket extends jspb.Message {
   getDelimiter(): number;
   setDelimiter(value: number): TimeTicket;
 
-  getActorId(): string;
-  setActorId(value: string): TimeTicket;
+  getActorId(): Uint8Array | string;
+  getActorId_asU8(): Uint8Array;
+  getActorId_asB64(): string;
+  setActorId(value: Uint8Array | string): TimeTicket;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TimeTicket.AsObject;
@@ -1564,7 +1610,7 @@ export namespace TimeTicket {
   export type AsObject = {
     lamport: string,
     delimiter: number,
-    actorId: string,
+    actorId: Uint8Array | string,
   }
 }
 

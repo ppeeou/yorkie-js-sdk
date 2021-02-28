@@ -42,32 +42,32 @@ message ActivateClientRequest {
 
 message ActivateClientResponse {
     string client_key = 1;
-    string client_id = 2;
+    bytes client_id = 2;
 }
 
 message DeactivateClientRequest {
     RequestHeader header = 1;
-    string client_id = 2;
+    bytes client_id = 2;
 }
 
 message DeactivateClientResponse {
-    string client_id = 1;
+    bytes client_id = 1;
 }
 
 message AttachDocumentRequest {
     RequestHeader header = 1;
-    string client_id = 2;
+    bytes client_id = 2;
     ChangePack change_pack = 3;
 }
 
 message AttachDocumentResponse {
-    string client_id = 1;
+    bytes client_id = 1;
     ChangePack change_pack = 2;
 }
 
 message DetachDocumentRequest {
     RequestHeader header = 1;
-    string client_id = 2;
+    bytes client_id = 2;
     ChangePack change_pack = 3;
 }
 
@@ -78,12 +78,8 @@ message DetachDocumentResponse {
 
 message WatchDocumentsRequest {
     RequestHeader header = 1;
-    string client_id = 2;
+    Client client = 2;
     repeated DocumentKey document_keys = 3;
-}
-
-message Clients {
-    repeated string client_ids = 1;
 }
 
 message WatchDocumentsResponse {
@@ -92,7 +88,7 @@ message WatchDocumentsResponse {
     }
 
     message Event {
-        string client_id = 1;
+        Client client = 1;
         EventType event_type = 2;
         repeated DocumentKey document_keys = 3;
     }
@@ -105,12 +101,12 @@ message WatchDocumentsResponse {
 
 message PushPullRequest {
     RequestHeader header = 1;
-    string client_id = 2;
+    bytes client_id = 2;
     ChangePack change_pack = 3;
 }
 
 message PushPullResponse {
-    string client_id = 1;
+    bytes client_id = 1;
     ChangePack change_pack = 2;
 }
 
@@ -135,7 +131,7 @@ message Change {
 message ChangeID {
     uint32 client_seq = 1;
     uint64 lamport = 2 [jstype = JS_STRING];
-    string actor_id = 3;
+    bytes actor_id = 3;
 }
 
 message Operation {
@@ -224,13 +220,13 @@ message JSONElementSimple {
 /////////////////////////////////////////
 
 message JSONElement {
-    message Object {
+    message JSONObject {
         repeated RHTNode nodes = 1;
         TimeTicket created_at = 2;
         TimeTicket moved_at = 3;
         TimeTicket removed_at = 4;
     }
-    message Array {
+    message JSONArray {
         repeated RGANode nodes = 1;
         TimeTicket created_at = 2;
         TimeTicket moved_at = 3;
@@ -264,8 +260,8 @@ message JSONElement {
     }
 
     oneof Body {
-        Object object = 1;
-        Array array = 2;
+        JSONObject json_object = 1;
+        JSONArray json_array = 2;
         Primitive primitive = 3;
         Text text = 4;
         RichText rich_text = 5;
@@ -313,6 +309,15 @@ message TextNodeID {
 // Messages for Common                 //
 /////////////////////////////////////////
 
+message Client {
+    bytes id = 1;
+    map<string, string> metadata = 2;
+}
+
+message Clients {
+    repeated Client clients = 1;
+}
+
 message DocumentKey {
     string collection = 1;
     string document = 2;
@@ -332,7 +337,7 @@ message TextNodePos {
 message TimeTicket {
     uint64 lamport = 1 [jstype = JS_STRING];
     uint32 delimiter = 2;
-    string actor_id = 3;
+    bytes actor_id = 3;
 }
 
 enum ValueType {

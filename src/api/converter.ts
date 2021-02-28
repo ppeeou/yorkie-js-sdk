@@ -15,8 +15,9 @@
  */
 
 import Long from 'long';
-
+import * as jspb from 'google-protobuf';
 import { Code, YorkieError } from '../util/error';
+import { Metadata } from '../core/client';
 import { InitialTimeTicket, TimeTicket } from '../document/time/ticket';
 import { Operation } from '../document/operation/operation';
 import { SetOperation } from '../document/operation/set_operation';
@@ -51,6 +52,7 @@ import {
   ChangeID as PbChangeID,
   ChangePack as PbChangePack,
   Checkpoint as PbCheckpoint,
+  Client as PbClient,
   DocumentKey as PbDocumentKey,
   JSONElement as PbJSONElement,
   JSONElementSimple as PbJSONElementSimple,
@@ -66,6 +68,25 @@ import {
 } from './yorkie_pb';
 import { IncreaseOperation } from '../document/operation/increase_operation';
 import { CounterType, Counter } from '../document/json/counter';
+
+function fromMetadataMap(pbMetadataMap: jspb.Map<string, string>): Metadata {
+  const metadata: Metadata = {};
+  pbMetadataMap.forEach((value: string, key: string) => {
+    metadata[key] = value;
+  });
+  return metadata;
+}
+
+function toClient(id: string, metadata: Metadata): PbClient {
+  const pbClient = new PbClient();
+  pbClient.setId(toUint8Array(id));
+  const pbMetadataMap = pbClient.getMetadataMap();
+  for (const [key, value] of Object.entries(metadata)) {
+    pbMetadataMap.set(key, value);
+  }
+
+  return pbClient;
+}
 
 function toDocumentKey(key: DocumentKey): PbDocumentKey {
   const pbDocumentKey = new PbDocumentKey();
@@ -89,7 +110,7 @@ function toChangeID(changeID: ChangeID): PbChangeID {
   const pbChangeID = new PbChangeID();
   pbChangeID.setClientSeq(changeID.getClientSeq());
   pbChangeID.setLamport(changeID.getLamportAsString());
-  pbChangeID.setActorId(changeID.getActorID());
+  pbChangeID.setActorId(toUint8Array(changeID.getActorID()));
   return pbChangeID;
 }
 
@@ -101,7 +122,7 @@ function toTimeTicket(ticket: TimeTicket): PbTimeTicket {
   const pbTimeTicket = new PbTimeTicket();
   pbTimeTicket.setLamport(ticket.getLamportAsString());
   pbTimeTicket.setDelimiter(ticket.getDelimiter());
-  pbTimeTicket.setActorId(ticket.getActorID());
+  pbTimeTicket.setActorId(toUint8Array(ticket.getActorID()));
   return pbTimeTicket;
 }
 
@@ -388,24 +409,24 @@ function toTextNodes(rgaTreeSplit: RGATreeSplit<string>): PbTextNode[] {
 }
 
 function toJSONObject(obj: JSONObject): PbJSONElement {
-  const pbJSONObject = new PbJSONElement.Object();
+  const pbJSONObject = new PbJSONElement.JSONObject();
   pbJSONObject.setNodesList(toRHTNodes(obj.getRHT()));
   pbJSONObject.setCreatedAt(toTimeTicket(obj.getCreatedAt()));
   pbJSONObject.setRemovedAt(toTimeTicket(obj.getRemovedAt()));
 
   const pbJSONElement = new PbJSONElement();
-  pbJSONElement.setObject(pbJSONObject);
+  pbJSONElement.setJsonObject(pbJSONObject);
   return pbJSONElement;
 }
 
 function toJSONArray(arr: JSONArray): PbJSONElement {
-  const pbJSONArray = new PbJSONElement.Array();
+  const pbJSONArray = new PbJSONElement.JSONArray();
   pbJSONArray.setNodesList(toRGANodes(arr.getElements()));
   pbJSONArray.setCreatedAt(toTimeTicket(arr.getCreatedAt()));
   pbJSONArray.setRemovedAt(toTimeTicket(arr.getRemovedAt()));
 
   const pbJSONElement = new PbJSONElement();
-  pbJSONElement.setArray(pbJSONArray);
+  pbJSONElement.setJsonArray(pbJSONArray);
   return pbJSONElement;
 }
 
@@ -461,8 +482,6 @@ function toJSONElement(jsonElement: JSONElement): PbJSONElement {
       `unimplemented element: ${jsonElement}`,
     );
   }
-
-  return null;
 }
 
 function toChangePack(pack: ChangePack): PbChangePack {
@@ -492,7 +511,7 @@ function fromChangeID(pbChangeID: PbChangeID): ChangeID {
   return ChangeID.of(
     pbChangeID.getClientSeq(),
     Long.fromString(pbChangeID.getLamport(), true),
-    pbChangeID.getActorId(),
+    toHexString(pbChangeID.getActorId_asU8()),
   );
 }
 
@@ -504,7 +523,7 @@ function fromTimeTicket(pbTimeTicket: PbTimeTicket): TimeTicket {
   return TimeTicket.of(
     Long.fromString(pbTimeTicket.getLamport(), true),
     pbTimeTicket.getDelimiter(),
-    pbTimeTicket.getActorId(),
+    toHexString(pbTimeTicket.getActorId_asU8()),
   );
 }
 
@@ -773,7 +792,7 @@ function fromChangePack(pbPack: PbChangePack): ChangePack {
   );
 }
 
-function fromJSONObject(pbObject: PbJSONElement.Object): JSONObject {
+function fromJSONObject(pbObject: PbJSONElement.JSONObject): JSONObject {
   const rht = new RHTPQMap();
   for (const pbRHTNode of pbObject.getNodesList()) {
     // eslint-disable-next-line
@@ -785,7 +804,7 @@ function fromJSONObject(pbObject: PbJSONElement.Object): JSONObject {
   return obj;
 }
 
-function fromJSONArray(pbArray: PbJSONElement.Array): JSONArray {
+function fromJSONArray(pbArray: PbJSONElement.JSONArray): JSONArray {
   const rgaTreeList = new RGATreeList();
   for (const pbRGANode of pbArray.getNodesList()) {
     // eslint-disable-next-line
@@ -871,10 +890,10 @@ function fromCounter(pbCounter: PbJSONElement.Counter): Counter {
 }
 
 function fromJSONElement(pbJSONElement: PbJSONElement): JSONElement {
-  if (pbJSONElement.hasObject()) {
-    return fromJSONObject(pbJSONElement.getObject());
-  } else if (pbJSONElement.hasArray()) {
-    return fromJSONArray(pbJSONElement.getArray());
+  if (pbJSONElement.hasJsonObject()) {
+    return fromJSONObject(pbJSONElement.getJsonObject());
+  } else if (pbJSONElement.hasJsonArray()) {
+    return fromJSONArray(pbJSONElement.getJsonArray());
   } else if (pbJSONElement.hasPrimitive()) {
     return fromJSONPrimitive(pbJSONElement.getPrimitive());
   } else if (pbJSONElement.hasText()) {
@@ -897,18 +916,30 @@ function bytesToObject(bytes: Uint8Array): JSONObject {
   }
 
   const pbJSONElement = PbJSONElement.deserializeBinary(bytes);
-  return fromJSONObject(pbJSONElement.getObject());
+  return fromJSONObject(pbJSONElement.getJsonObject());
 }
 
 function objectToBytes(obj: JSONObject): Uint8Array {
   return toJSONElement(obj).serializeBinary();
 }
 
+function toHexString(bytes: Uint8Array): string {
+  return Buffer.from(bytes).toString('hex');
+}
+
+function toUint8Array(hex: string): Uint8Array {
+  return Uint8Array.from(Buffer.from(hex, 'hex'));
+}
+
 export const converter = {
-  toChangePack: toChangePack,
-  fromChangePack: fromChangePack,
-  toDocumentKeys: toDocumentKeys,
-  fromDocumentKeys: fromDocumentKeys,
-  objectToBytes: objectToBytes,
-  bytesToObject: bytesToObject,
+  fromMetadataMap,
+  toClient,
+  toChangePack,
+  fromChangePack,
+  toDocumentKeys,
+  fromDocumentKeys,
+  objectToBytes,
+  bytesToObject,
+  toHexString,
+  toUint8Array,
 };
